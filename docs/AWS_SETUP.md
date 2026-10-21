@@ -113,11 +113,4 @@ For a temporary local run against genuine AWS services, set the same configurati
 
 Confirm in AWS that registration writes to RDS, new comments appear in DynamoDB, uploads appear in S3, and the running instance reads the named Parameter Store secret. Complete `DEMO_CHECKLIST.md` and record the required video. After recording, remove the lab RDS instance and Beanstalk deployment as instructed, and **keep the DynamoDB table** for the professor. Do not run broad account cleanup commands.
 
-## Official references
 
-- [Elastic Beanstalk supported platforms](https://docs.aws.amazon.com/elasticbeanstalk/latest/platforms/platforms-supported.html)
-- [Deploying .NET on Linux](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/dotnet-linux-quickstart.html)
-- [Using a Procfile](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/dotnet-linux-procfile.html)
-- [Parameter Store SecureString](https://docs.aws.amazon.com/systems-manager/latest/userguide/secure-string-parameter.html)
-- [DynamoDB table and item basics](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html)
-- [RDS SQL Server TLS and trust stores](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/ssl-certificate-rotation-sqlserver.html)
