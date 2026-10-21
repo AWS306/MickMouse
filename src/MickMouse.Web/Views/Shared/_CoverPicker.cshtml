@@ -1,0 +1,3 @@
+@model string
+@{ var choices = new[] { (Key: "trail", Name: "Trail"), (Key: "systems", Name: "Links"), (Key: "rain", Name: "Rain"), (Key: "workshop", Name: "Room"), (Key: "map", Name: "Map") }; }
+<fieldset class="cover-fieldset"><legend>Journal cover</legend><div class="cover-picker">@foreach (var choice in choices) { <label class="cover-option"><input type="radio" name="CoverKey" value="@choice.Key" checked="@(Model == choice.Key)" required /><img src="/art/covers/@(choice.Key).svg" width="150" height="150" alt="" /><span>@choice.Name</span></label> }</div></fieldset>

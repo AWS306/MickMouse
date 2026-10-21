@@ -1,0 +1,62 @@
+@model BrowseViewModel
+@{
+    ViewData["Title"] = "The listening journal";
+    var isFiltered = !string.IsNullOrWhiteSpace(Model.Topic) || !string.IsNullOrWhiteSpace(Model.Host) || Model.Page > 1;
+    var shows = Model.Episodes.Where(e => e.Podcast != null).Select(e => e.Podcast!).DistinctBy(p => p.Id).Take(5).ToList();
+}
+@if (!isFiltered)
+{
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+            <p class="eyebrow">The listening journal</p>
+            <h1 id="hero-title">Good stories.<br /><em>Room to grow.</em></h1>
+            <p class="lede">A quiet corner for curious minds. Explore independent conversations about technology, fresh ideas, and the things we notice when we slow down.</p>
+            <div class="button-row"><a class="button" href="#episodes">Find your next listen <span aria-hidden="true">↗</span></a><a class="link-arrow" asp-action="Index" asp-route-sort="popular">Most played <span aria-hidden="true">→</span></a></div>
+            <p class="feature-note">@Model.PodcastCount shows. @Model.TotalCount episodes. A little more perspective.</p>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+            <div class="visual-top"><span>AN OPEN INVITATION TO LISTEN</span><span>VOL. 01</span></div>
+            <img class="journal-art" src="~/art/journal.svg" width="520" height="360" alt="" />
+            <div class="visual-bottom"><span>PUT THE KETTLE ON.<br />LET A GOOD IDEA IN.</span><div class="sound-mark">@for (var i = 0; i < 20; i++) { <i></i> }</div></div>
+        </div>
+    </section>
+}
+else
+{
+    <div class="page-heading"><div><p class="eyebrow">Follow your curiosity</p><h1>Find a good conversation.</h1><p>Search by topic or host, then choose the story that catches your ear.</p></div></div>
+}
+
+<section id="episodes" aria-labelledby="episodes-title">
+    <div class="section-heading"><h2 id="episodes-title">@(Model.Sort == "popular" ? "The well-played pages" : "Fresh from the journal") <span class="count">@Model.TotalCount episodes</span></h2><span class="small muted">@(Model.Sort == "popular" ? "Most listened first" : "Newest first")</span></div>
+    <form asp-controller="Episodes" asp-action="Index" method="get" class="filter-bar">
+        <div class="field"><label for="topic">Topic</label><select id="topic" name="topic"><option value="">All topics</option>@foreach (var topic in Model.Topics) { <option value="@topic" selected="@(topic == Model.Topic)">@topic</option> }</select></div>
+        <div class="field"><label for="host">Host</label><input id="host" name="host" value="@Model.Host" maxlength="100" placeholder="Search a host name" /></div>
+        <div class="field"><label for="sort">Order by</label><select id="sort" name="sort"><option value="latest" selected="@(Model.Sort != "popular")">Latest release</option><option value="popular" selected="@(Model.Sort == "popular")">Most played</option></select></div>
+        <div class="filter-actions"><button class="button" type="submit">Find episodes</button>@if (isFiltered || Model.Sort == "popular") { <a class="clear-link" asp-action="Index">Clear filters</a> }</div>
+    </form>
+    @if (isFiltered)
+    {
+        <p class="result-note">@Model.TotalCount matching @(Model.TotalCount == 1 ? "episode" : "episodes")@(!string.IsNullOrEmpty(Model.Topic) ? $" · {Model.Topic}" : "")@(!string.IsNullOrEmpty(Model.Host) ? $" · Host: {Model.Host}" : "")</p>
+    }
+    @if (Model.Episodes.Count > 0)
+    {
+        <div class="episode-list">@foreach (var episode in Model.Episodes) { <partial name="_EpisodeRow" model="episode" /> }</div>
+        @if (Model.Page > 1 || Model.HasNext)
+        {
+            <nav class="pagination" aria-label="Episode pages">@if (Model.Page > 1) { <a class="button button-secondary button-small" asp-action="Index" asp-route-topic="@Model.Topic" asp-route-host="@Model.Host" asp-route-sort="@Model.Sort" asp-route-page="@(Model.Page - 1)">← Previous</a> }<span>Page @Model.Page</span>@if (Model.HasNext) { <a class="button button-secondary button-small" asp-action="Index" asp-route-topic="@Model.Topic" asp-route-host="@Model.Host" asp-route-sort="@Model.Sort" asp-route-page="@(Model.Page + 1)">Next →</a> }</nav>
+        }
+    }
+    else
+    {
+        <div class="empty-state"><p class="eyebrow">A quiet page</p><h2>No episodes found.</h2><p>Try a different host or choose another topic. Your next good listen could be one filter away.</p><a class="button button-secondary" asp-action="Index">Browse all episodes</a></div>
+    }
+</section>
+
+@if (!isFiltered && shows.Count > 0)
+{
+    <section aria-labelledby="shows-title" class="section-space"><div class="section-heading"><h2 id="shows-title">A few familiar voices</h2><span class="small muted">Find your people</span></div><div class="show-strip">@foreach (var show in shows) { <a class="show-card" asp-action="Index" asp-route-host="@show.HostName"><img src="/art/covers/@(show.CoverKey).svg" width="220" height="220" alt="" loading="lazy" /><h3>@show.Title</h3><p>@show.HostName</p></a> }</div></section>
+}
+@if (User.Identity?.IsAuthenticated != true)
+{
+    <aside class="quote-band"><div><p class="eyebrow eyebrow-light">Make yourself at home</p><h2>Keep the conversation going.</h2><p>Save the episodes you love, follow your favourite shows, and leave a thought for the next listener.</p></div><a class="button button-light" asp-controller="Account" asp-action="Register">Join the journal <span aria-hidden="true">↗</span></a></aside>
+}

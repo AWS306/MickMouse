@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/App_Data/
+**/TestResults/
+artifacts/
+*.user
+*.suo
+*.db
+*.db-shm
+*.db-wal
+appsettings.*.local.json
+.env
+.aws/
+
+.vs/

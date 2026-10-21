@@ -1,0 +1,52 @@
+@inject IConfiguration Configuration
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var isLocal = !string.Equals(Configuration["App:Mode"], "Aws", StringComparison.OrdinalIgnoreCase);
+    var studio = User.IsInRole("Podcaster") || User.IsInRole("Admin");
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#123a73" />
+    <meta name="description" content="Mick Mouse is a quiet corner for good conversations about nature, small discoveries and practical technology." />
+    <title>@ViewData["Title"] · Mick Mouse</title>
+    <link rel="icon" type="image/svg+xml" href="~/art/favicon.svg" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="topline"><div class="shell topline-inner"><span>Independent voices. A little room to listen.</span>@if (isLocal) { <span class="mode-badge">Local preview</span> }</div></div>
+    <header class="site-header">
+        <div class="shell header-inner">
+            <a class="brand" asp-controller="Episodes" asp-action="Index" aria-label="Mick Mouse, browse episodes"><img src="~/art/favicon.svg" width="39" height="39" alt="" /><span>Mick Mouse<span class="brand-caption">THE LISTENING JOURNAL</span></span></a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a class="@(currentController is "Episodes" or "Podcasts" ? "active" : "")" asp-controller="Episodes" asp-action="Index">Browse</a>
+                @if (studio) { <a class="@(currentController == "Studio" ? "active" : "")" asp-controller="Studio" asp-action="Index">Studio</a> }
+                @if (User.IsInRole("Admin")) { <a class="@(currentController == "Admin" ? "active" : "")" asp-controller="Admin" asp-action="Index">Admin</a> }
+            </nav>
+            <div class="account-nav">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a class="account-link" asp-controller="Account" asp-action="Profile">My account</a>
+                    <form asp-controller="Account" asp-action="Logout" method="post"><button class="text-button" type="submit">Sign out</button></form>
+                }
+                else
+                {
+                    <a class="account-link" asp-controller="Account" asp-action="Login">Sign in</a>
+                    <a class="button button-small" asp-controller="Account" asp-action="Register">Join the journal <span aria-hidden="true">↗</span></a>
+                }
+            </div>
+        </div>
+    </header>
+    <main id="main-content" class="shell main-shell" tabindex="-1">
+        @if (TempData["StatusMessage"] is string status) { <div class="notice notice-success" role="status"><span class="notice-symbol" aria-hidden="true">✓</span><span>@status</span></div> }
+        @if (TempData["ErrorMessage"] is string error) { <div class="notice notice-error" role="alert">@error</div> }
+        @RenderBody()
+    </main>
+    <footer class="site-footer"><div class="shell footer-inner"><div><span class="footer-brand">Mick Mouse</span><p>Conversations worth taking outside.</p></div><p class="footer-note">Slow down. Tune in. Take something with you.</p><div class="footer-links"><a asp-controller="Episodes" asp-action="Index">Find your next listen <span aria-hidden="true">↗</span></a><a href="~/media/credits.html">Media credits</a></div></div></footer>
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

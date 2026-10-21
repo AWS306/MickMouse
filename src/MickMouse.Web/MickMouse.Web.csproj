@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>MickMouse.Web</RootNamespace>
+    <UserSecretsId>mick-mouse-local-development</UserSecretsId>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.13" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.109" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.104.5" />
+    <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="4.0.104.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="App_Data/**" CopyToPublishDirectory="Never" CopyToOutputDirectory="Never" />
+    <Content Include="../../database/media-catalog.json" Link="media-catalog.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('../../database/media-catalog.json')" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,147 @@
+[
+  {
+    "EpisodeId": {
+      "N": "1"
+    },
+    "CommentId": {
+      "S": "console-demo-01"
+    },
+    "PodcastId": {
+      "N": "1"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000004"
+    },
+    "AuthorName": {
+      "S": "Alex"
+    },
+    "Text": {
+      "S": "The practical examples made this a useful listen."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-21T12:31:43.0391150Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792672303.039115"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "1"
+    },
+    "CommentId": {
+      "S": "console-demo-02"
+    },
+    "PodcastId": {
+      "N": "1"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000005"
+    },
+    "AuthorName": {
+      "S": "Rain"
+    },
+    "Text": {
+      "S": "I would like to try this with my own small server."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-21T11:31:43.0391150Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792668703.039115"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "1"
+    },
+    "CommentId": {
+      "S": "console-demo-03"
+    },
+    "PodcastId": {
+      "N": "1"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000004"
+    },
+    "AuthorName": {
+      "S": "Alex"
+    },
+    "Text": {
+      "S": "This older comment demonstrates the editing deadline."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-20T07:31:43.0391150Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792567903.039115"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "1"
+    },
+    "CommentId": {
+      "S": "console-demo-04"
+    },
+    "PodcastId": {
+      "N": "1"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000005"
+    },
+    "AuthorName": {
+      "S": "Rain"
+    },
+    "Text": {
+      "S": "A clear explanation of a complicated topic."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-21T09:31:43.0391150Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792661503.039115"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "1"
+    },
+    "CommentId": {
+      "S": "console-demo-05"
+    },
+    "PodcastId": {
+      "N": "1"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000004"
+    },
+    "AuthorName": {
+      "S": "Alex"
+    },
+    "Text": {
+      "S": "The conversation gave me a new idea for a class project."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-21T08:31:43.0391150Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792657903.039115"
+    },
+    "Version": {
+      "N": "1"
+    }
+  }
+]

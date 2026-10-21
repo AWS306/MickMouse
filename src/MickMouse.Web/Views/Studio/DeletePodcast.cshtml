@@ -1,0 +1,9 @@
+@model DeletePodcastViewModel
+@{ ViewData["Title"] = "Delete show"; var remaining = Model.Podcast.Episodes.Count(e => !e.IsDeleted || !e.CleanupCompleted); }
+<nav class="breadcrumb" aria-label="Breadcrumb"><a asp-action="Index">The studio</a><span aria-hidden="true">/</span><span>Delete show</span></nav>
+<section class="confirmation-panel panel"><p class="eyebrow">A final check</p><h1>Delete this show?</h1><p class="muted">This removes the show and its subscriptions from the journal.</p><div class="confirmation-detail"><strong>@Model.Podcast.Title</strong><p>Hosted by @Model.Podcast.HostName</p></div>
+    @if (remaining > 0)
+    { <div class="callout danger-callout"><p>This show still has @remaining @(remaining == 1 ? "episode" : "episodes"). Delete its episodes first and finish any pending cleanup before deleting the show.</p></div><a class="button button-secondary" asp-action="Index">Back to the studio</a> }
+    else
+    { <div class="callout danger-callout"><p>This action cannot be undone.</p></div><form asp-action="DeletePodcast" asp-route-id="@Model.Podcast.Id" method="post">@if (!ViewData.ModelState.IsValid) { <div asp-validation-summary="All"></div> }<div class="button-row"><button class="button button-danger" type="submit">Delete show</button><a class="button button-secondary" asp-action="Index">Keep the show</a></div></form> }
+</section>

@@ -1,0 +1,147 @@
+[
+  {
+    "EpisodeId": {
+      "N": "1"
+    },
+    "CommentId": {
+      "S": "sample-comment-01"
+    },
+    "PodcastId": {
+      "N": "1"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000004"
+    },
+    "AuthorName": {
+      "S": "Alex"
+    },
+    "Text": {
+      "S": "A useful starting point for my next Linux lab. I saved this episode for later."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-19T12:01:00Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792497660"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "1"
+    },
+    "CommentId": {
+      "S": "sample-comment-02"
+    },
+    "PodcastId": {
+      "N": "1"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000005"
+    },
+    "AuthorName": {
+      "S": "Rain"
+    },
+    "Text": {
+      "S": "I came back to this after trying the ideas on my own computer."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-19T12:02:00Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792497720"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "3"
+    },
+    "CommentId": {
+      "S": "sample-comment-03"
+    },
+    "PodcastId": {
+      "N": "2"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000002"
+    },
+    "AuthorName": {
+      "S": "Cem"
+    },
+    "Text": {
+      "S": "I like hearing how other developers think through everyday problems."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-19T12:03:00Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792497780"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "5"
+    },
+    "CommentId": {
+      "S": "sample-comment-04"
+    },
+    "PodcastId": {
+      "N": "3"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000005"
+    },
+    "AuthorName": {
+      "S": "Rain"
+    },
+    "Text": {
+      "S": "This is going on my weekend listening list."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-19T12:04:00Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792497840"
+    },
+    "Version": {
+      "N": "1"
+    }
+  },
+  {
+    "EpisodeId": {
+      "N": "9"
+    },
+    "CommentId": {
+      "S": "sample-comment-05"
+    },
+    "PodcastId": {
+      "N": "5"
+    },
+    "UserId": {
+      "S": "10000000-0000-0000-0000-000000000003"
+    },
+    "AuthorName": {
+      "S": "Maya"
+    },
+    "Text": {
+      "S": "An interesting conversation. I followed the source link to learn more."
+    },
+    "CreatedAtUtc": {
+      "S": "2026-10-19T12:05:00Z"
+    },
+    "EditUntilEpoch": {
+      "N": "1792497900"
+    },
+    "Version": {
+      "N": "1"
+    }
+  }
+]

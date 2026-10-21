@@ -1,0 +1,22 @@
+@model ProfileViewModel
+@{ ViewData["Title"] = "My Account"; var initial = string.IsNullOrWhiteSpace(Model.User.DisplayName) ? "M" : Model.User.DisplayName[..1].ToUpperInvariant(); }
+<div class="page-heading"><div class="profile-heading"><span class="avatar" aria-hidden="true">@initial</span><div><p class="eyebrow">Your little corner</p><h1>My Account</h1><p>@Model.User.DisplayName</p><p class="profile-line">@Model.User.Email <span class="badge">@Model.User.Role</span></p></div></div>@if (User.IsInRole("Podcaster") || User.IsInRole("Admin")) { <a class="button button-secondary" asp-controller="Studio" asp-action="Index">Open the studio <span aria-hidden="true">↗</span></a> }</div>
+<section aria-labelledby="following-title"><div class="section-heading"><h2 id="following-title">Following <span class="count">@Model.Subscriptions.Count shows</span></h2></div>
+    @if (Model.Subscriptions.Count > 0)
+    { <div class="show-strip">@foreach (var show in Model.Subscriptions) { <a class="show-card" asp-controller="Episodes" asp-action="Index" asp-route-host="@show.HostName"><img src="/art/covers/@(show.CoverKey).svg" width="220" height="220" alt="" /><h3>@show.Title</h3><p>@show.HostName</p></a> }</div> }
+    else
+    { <div class="empty-state compact"><h2>Find a familiar voice.</h2><p>Follow a show from any episode page. It will have a place here.</p><a class="button button-secondary button-small" asp-controller="Episodes" asp-action="Index">Explore the journal</a></div> }
+</section>
+
+<section aria-labelledby="liked-title" class="section-space"><div class="section-heading"><h2 id="liked-title">The keepers <span class="count">@Model.LikedEpisodes.Count liked episodes</span></h2></div>
+    @if (Model.LikedEpisodes.Count > 0)
+    { <div class="episode-list">@foreach (var episode in Model.LikedEpisodes) { <partial name="_EpisodeRow" model="episode" /> }</div> }
+    else
+    { <div class="empty-state compact"><h2>A page for your favourites.</h2><p>Like an episode and come back to it whenever you need a good listen.</p><a class="link-arrow" asp-controller="Episodes" asp-action="Index">Find your first keeper <span aria-hidden="true">↗</span></a></div> }
+</section>
+
+<section class="account-danger section-space" aria-labelledby="delete-account-title">
+    <h2 id="delete-account-title">Delete My Account</h2>
+    <p>Permanently remove your account, comments, likes and subscriptions. Shows and episodes you own will also be removed. You will confirm your password before anything is deleted.</p>
+    <a class="button button-danger" asp-controller="Account" asp-action="DeleteAccount">Delete My Account</a>
+</section>

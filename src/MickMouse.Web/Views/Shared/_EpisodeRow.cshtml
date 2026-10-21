@@ -1,0 +1,12 @@
+@model Episode
+<article class="episode-row">
+    <span class="episode-number" aria-hidden="true">@Model.Id.ToString("00")</span>
+    <a asp-controller="Episodes" asp-action="Details" asp-route-id="@Model.Id" tabindex="-1" aria-hidden="true"><img class="episode-art" src="/art/covers/@(Model.CoverKey).svg" width="93" height="93" alt="" loading="lazy" /></a>
+    <div class="episode-info">
+        <span class="topic-label">@Model.Topic</span>
+        <h3><a asp-controller="Episodes" asp-action="Details" asp-route-id="@Model.Id">@Model.Title</a></h3>
+        <div class="episode-meta"><span>@Model.Podcast?.Title</span><span class="dot host-label">@Model.Podcast?.HostName</span><time class="dot" datetime="@Model.ReleaseDateUtc.ToString("yyyy-MM-dd")">@Model.ReleaseDateUtc.ToString("dd MMM yyyy")</time></div>
+    </div>
+    <div class="episode-stats"><strong>@Model.DurationMinutes min @(Model.MediaKey?.StartsWith("samples/episode-", StringComparison.Ordinal) == true ? "full episode" : "")</strong><br />@Model.PlayCount.ToString("N0") listens</div>
+    <a class="round-link" asp-controller="Episodes" asp-action="Details" asp-route-id="@Model.Id" aria-label="Listen to @Model.Title"><span aria-hidden="true">↗</span></a>
+</article>

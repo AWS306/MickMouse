@@ -1,0 +1,12 @@
+@model LoginViewModel
+@inject IConfiguration Configuration
+@{ ViewData["Title"] = "Sign in"; var isLocal = !string.Equals(Configuration["App:Mode"], "Aws", StringComparison.OrdinalIgnoreCase); }
+<div class="auth-layout">
+    <aside class="auth-story"><div><p class="eyebrow eyebrow-light">Welcome back to the journal</p><h2>A familiar voice.<br />A fresh perspective.</h2><p>Pick up where you left off. Your favourite shows and the conversations you care about are waiting.</p></div><div class="sound-mark" aria-hidden="true">@for (var i = 0; i < 28; i++) { <i></i> }</div></aside>
+    <section class="auth-form" aria-labelledby="login-title"><h1 id="login-title">Good to see you.</h1><p class="auth-intro">Sign in and make yourself at home.</p>
+        <form asp-action="Login" method="post">@if (!ViewData.ModelState.IsValid) { <div asp-validation-summary="All"></div> }<input asp-for="ReturnUrl" type="hidden" /><div class="field"><label asp-for="Email">Email address</label><input asp-for="Email" type="email" autocomplete="username" required placeholder="you@example.com" /><span asp-validation-for="Email"></span></div><div class="field"><label asp-for="Password"></label><input asp-for="Password" type="password" autocomplete="current-password" required /><span asp-validation-for="Password"></span></div><div class="field"><label class="check-label"><input asp-for="RememberMe" /> Keep me signed in on this device</label></div><button class="button button-full" type="submit">Sign in <span aria-hidden="true">↗</span></button></form>
+        <p class="auth-footer">New around here? <a asp-action="Register">Join the journal</a>.</p>
+        @if (isLocal)
+        { <details class="demo-accounts"><summary>Try a local preview account</summary><div class="demo-inner"><p>Shared demo password: <code>TrailDemo!42</code></p><p><strong>Listener</strong> · alex@mick.local<br /><strong>Podcaster</strong> · cem@mick.local<br /><strong>Admin</strong> · admin@mick.local</p><p class="muted">These sample accounts are for the local preview.</p></div></details> }
+    </section>
+</div>

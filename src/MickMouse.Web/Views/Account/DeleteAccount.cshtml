@@ -1,0 +1,27 @@
+@model DeleteAccountViewModel
+@{ ViewData["Title"] = "Delete My Account"; }
+<nav class="breadcrumb" aria-label="Breadcrumb"><a asp-action="Profile">My Account</a><span aria-hidden="true">/</span><span>Delete My Account</span></nav>
+<div class="confirmation-panel panel">
+    <p class="eyebrow">Account settings</p>
+    <h1>Delete My Account</h1>
+    <p>This permanently removes your account and the content listed below. This cannot be undone.</p>
+    <div class="deletion-summary"><ul>
+        <li>Your account, comments, likes and subscriptions</li>
+        <li>@Model.PodcastCount show(s) you own and @Model.EpisodeCount active episode(s)</li>
+        <li>Comments and likes on your deleted episodes, and their uploaded recordings</li>
+    </ul></div>
+    @if (Model.IsLastAdmin)
+    {
+        <div class="notice notice-error" role="alert">You are the last active admin. Create or promote another active admin before deleting this account.</div>
+        <a class="button button-secondary" asp-action="Profile">Back to My Account</a>
+    }
+    else
+    {
+        <form asp-action="DeleteAccount" method="post">
+            @if (!ViewData.ModelState.IsValid) { <div asp-validation-summary="All" role="alert"></div> }
+            <div class="field"><label asp-for="Password"></label><input asp-for="Password" autocomplete="current-password" required /><span asp-validation-for="Password"></span></div>
+            <div class="field"><label asp-for="Confirmation"></label><input asp-for="Confirmation" autocomplete="off" spellcheck="false" required /><span asp-validation-for="Confirmation"></span></div>
+            <div class="button-row form-footer"><button class="button button-danger" type="submit">Permanently delete my account</button><a class="button button-secondary" asp-action="Profile">Keep my account</a></div>
+        </form>
+    }
+</div>

@@ -1,0 +1,79 @@
+@model EpisodeDetailViewModel
+@{
+    var episode = Model.Episode;
+    ViewData["Title"] = episode.Title;
+    var returnUrl = Url.Action("Details", "Episodes", new { id = episode.Id });
+    var isExcerpt = episode.MediaKey?.StartsWith("samples/episode-", StringComparison.Ordinal) == true;
+    var canInteract = episode.Status == EpisodeStatus.Published && episode.ReleaseDateUtc <= Model.NowUtc;
+}
+<nav class="breadcrumb" aria-label="Breadcrumb"><a asp-action="Index">The journal</a><span aria-hidden="true">/</span><a asp-action="Index" asp-route-host="@episode.Podcast?.HostName">@episode.Podcast?.Title</a><span aria-hidden="true">/</span><span>Episode @episode.Id.ToString("00")</span></nav>
+<article>
+    <header class="detail-header">
+        <img class="detail-cover" src="/art/covers/@(episode.CoverKey).svg" width="295" height="295" alt="Original Mick Mouse journal artwork" />
+        <div><div class="detail-title-top"><a class="detail-show" asp-action="Index" asp-route-host="@episode.Podcast?.HostName">@episode.Podcast?.Title</a>@if (episode.Status != EpisodeStatus.Published) { <span class="badge badge-pending">@episode.Status</span> }</div><p class="eyebrow">@episode.Topic</p><h1>@episode.Title</h1><div class="episode-meta"><span>With @episode.Podcast?.HostName</span><time class="dot" datetime="@episode.ReleaseDateUtc.ToString("yyyy-MM-dd")">@episode.ReleaseDateUtc.ToString("dd MMM yyyy")</time><span class="dot">@episode.DurationMinutes min @(isExcerpt ? "full episode" : "")</span><span class="dot"><span id="play-count">@episode.PlayCount.ToString("N0")</span> listens</span></div></div>
+    </header>
+    <div class="detail-body">
+        <div class="detail-main">
+            @if (!string.IsNullOrEmpty(Model.PlaybackUrl) && !Model.MediaUnavailable)
+            {
+                <div class="player-panel"><div class="player-heading"><span>@(isExcerpt ? "20-second demo excerpt" : "Settle in. Press play.")</span><span aria-hidden="true">▶</span></div>
+                    @if (episode.MediaContentType?.StartsWith("video/", StringComparison.OrdinalIgnoreCase) == true)
+                    { <video controls preload="metadata" data-episode-player aria-label="Video: @episode.Title"><source src="@Model.PlaybackUrl" type="@episode.MediaContentType" />Your browser cannot play this video. <a href="@Model.PlaybackUrl">Open the media file</a>.</video> }
+                    else
+                    { <audio controls preload="metadata" data-episode-player aria-label="Audio: @episode.Title"><source src="@Model.PlaybackUrl" type="@episode.MediaContentType" />Your browser cannot play this audio. <a href="@Model.PlaybackUrl">Open the media file</a>.</audio> }
+                    @if (!string.IsNullOrEmpty(episode.MediaCredit)) { <p class="player-note">@episode.MediaCredit</p> }
+                    <p class="player-note" data-play-status role="status" hidden></p>
+                </div>
+                @if (canInteract) { <form asp-action="Play" asp-route-id="@episode.Id" method="post" data-play-tracker hidden></form> }
+            }
+            else
+            {
+                <div class="notice notice-error" role="status">The recording is unavailable right now. Please try again later.@if (!string.IsNullOrEmpty(episode.SourceUrl)) { <span><a href="@episode.SourceUrl" target="_blank" rel="noopener noreferrer">Visit the original episode ↗</a></span> }</div>
+            }
+            <div class="episode-summary">@episode.Summary</div>
+            <section class="comments-section" aria-labelledby="comments-title">
+                <div class="section-heading"><h2 id="comments-title">Around the mic <span class="count">@Model.Comments.Count comments</span></h2></div>
+                <p class="small muted">A question, a thought, a different perspective. There is room for yours.</p>
+                @if (Model.CommentsUnavailable)
+                {
+                    <div class="notice notice-error">Comments are temporarily unavailable. Please try again shortly.</div>
+                }
+                else
+                {
+                    @if (!canInteract)
+                    {
+                        <div class="callout"><p>This episode is not public yet. Listener comments become available after approval and the release date.</p></div>
+                    }
+                    else if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form asp-action="Comment" asp-route-id="@episode.Id" method="post" class="comment-form">@if (!ViewData.ModelState.IsValid) { <div asp-validation-summary="All"></div> }<div class="field"><label for="comment-text">Add your thought</label><textarea id="comment-text" name="text" required maxlength="2000" rows="4" placeholder="What stayed with you?">@Model.CommentText</textarea><span class="field-help">Up to 2,000 characters. You can edit your own comment for 24 hours.</span></div><button class="button button-small" type="submit">Leave a comment <span aria-hidden="true">↗</span></button></form>
+                    }
+                    else
+                    {
+                        <div class="callout"><p><a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@returnUrl">Sign in</a> or <a asp-controller="Account" asp-action="Register">create an account</a> to join the conversation.</p></div>
+                    }
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <article class="comment-item"><header class="comment-top"><span class="comment-author">@comment.AuthorName</span><time class="comment-time" datetime="@(comment.CreatedAtUtc.ToString("yyyy-MM-ddTHH:mm:ss"))Z">@comment.CreatedAtUtc.ToString("dd MMM yyyy, HH:mm") UTC</time></header><p class="comment-text">@comment.Text</p>
+                            @if (comment.UpdatedAtUtc.HasValue) { <span class="comment-edited">Edited @comment.UpdatedAtUtc.Value.ToString("dd MMM, HH:mm") UTC</span> }
+                            @if (canInteract && Model.CurrentUserId is Guid actorId && comment.CanEdit(actorId, Model.NowUtc))
+                            { <div class="comment-actions"><a asp-action="EditComment" asp-route-episodeId="@episode.Id" asp-route-commentId="@comment.CommentId">Edit your comment</a><span class="comment-edited">Until @comment.CreatedAtUtc.AddHours(24).ToString("dd MMM, HH:mm") UTC</span></div> }
+                            else if (Model.CurrentUserId == comment.UserId)
+                            { <p class="comment-edit-note">The 24-hour editing window has closed.</p> }
+                        </article>
+                    }
+                    @if (Model.Comments.Count == 0) { <div class="empty-state compact"><h2>The conversation starts here.</h2><p>Be the first to leave a thought about this episode.</p></div> }
+                }
+            </section>
+        </div>
+        <aside class="details-aside"><div class="aside-inner"><p class="eyebrow">Keep listening</p><h2>Good company for curious minds.</h2><p>@episode.Podcast?.Description</p>
+            @if (canInteract && User.Identity?.IsAuthenticated == true)
+            { <form asp-controller="Podcasts" asp-action="Subscribe" asp-route-id="@episode.PodcastId" method="post"><button class="button @(Model.IsSubscribed ? "button-secondary" : "")" type="submit">@(Model.IsSubscribed ? "Following · Unfollow" : "Follow this show")</button></form><form asp-action="Like" asp-route-id="@episode.Id" method="post"><button class="button button-secondary" type="submit">@(Model.IsLiked ? "Saved · Remove like" : "♡ Like this episode")</button></form> }
+            else if (canInteract)
+            { <a class="button" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@returnUrl">Sign in to follow</a> }
+            <div class="aside-meta"><span>Topic</span><strong>@episode.Topic</strong></div><div class="aside-meta"><span>@(isExcerpt ? "Full episode length" : "Episode length")</span><strong>@episode.DurationMinutes minutes</strong></div>
+            @if (!string.IsNullOrEmpty(episode.SourceUrl)) { <div class="soft-divider"><p class="small">From the original publisher</p><a class="link-arrow" href="@episode.SourceUrl" target="_blank" rel="noopener noreferrer">Listen to the full episode <span aria-hidden="true">↗</span></a></div> }
+            @if (Model.CanManage) { <div class="soft-divider"><p class="small muted">Your studio</p><a class="button button-secondary button-small" asp-controller="Studio" asp-action="EditEpisode" asp-route-id="@episode.Id">Edit episode</a></div> }
+        </div></aside>
+    </div>
+</article>

@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadOnlyTheConnectionParameter",
+      "Effect": "Allow",
+      "Action": "ssm:GetParameter",
+      "Resource": "arn:aws:ssm:REGION:ACCOUNT_ID:parameter/mickmouse/lab3/sql-connection"
+    },
+    {
+      "Sid": "EpisodeCommentsOnly",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:Query",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:Scan"
+      ],
+      "Resource": "arn:aws:dynamodb:REGION:ACCOUNT_ID:table/MickMouseComments"
+    },
+    {
+      "Sid": "ReadApplicationMedia",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::BUCKET_NAME/samples/*",
+        "arn:aws:s3:::BUCKET_NAME/uploads/*"
+      ]
+    },
+    {
+      "Sid": "WriteUploadedMedia",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::BUCKET_NAME/uploads/*"
+    }
+  ]
+}
